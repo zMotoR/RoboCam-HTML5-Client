@@ -70,6 +70,10 @@
                 <action id="-15" name="Set visible" sid="2116508798057796" type="Joystick2">
                     <param id="0" name="Visibility">0</param>
                 </action>
+                <action id="2" name="Stop" sid="9577485782454701" type="Hands" />
+                <action id="5" name="Set frame" sid="3706416821742659" type="Hands">
+                    <param id="0" name="Frame number">0</param>
+                </action>
                 <action id="0" name="Call function" sid="7592723692904235" type="Function">
                     <param id="0" name="Name">&quot;initStrings&quot;</param>
                     <param id="1" name="Parameter {n}"></param>
@@ -96,6 +100,9 @@
                 </action>
                 <action disabled="1" id="0" name="Set text" sid="8018852409699049" type="Text">
                     <param id="0" name="Text">Browser.Language</param>
+                </action>
+                <action id="5" name="Check item exists" sid="8832340574085047" type="LocalStorage">
+                    <param id="0" name="Key">&quot;control&quot;</param>
                 </action>
             </actions>
         </event-block>
@@ -729,6 +736,10 @@
                             <param id="0" name="X">ViewportRight(0) - ButtonFullScreen.Width / 2 - 30</param>
                             <param id="1" name="Y">ViewportTop(0) + ButtonFullScreen.Height / 2 + 30</param>
                         </action>
+                        <action id="-3" name="Set position" sid="4691984820368347" type="Hands">
+                            <param id="0" name="X">ViewportRight(0) - Hands.Width / 2 - 30</param>
+                            <param id="1" name="Y">ViewportTop(0) + Hands.Height / 2 + 30 + 120</param>
+                        </action>
                     </actions>
                     <sub-events>
                         <event-block sid="3406869816688723">
@@ -748,6 +759,9 @@
                                     <param id="0" name="X">ViewportLeft(0) + Joystick2.Width / 2</param>
                                     <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
                                 </action>
+                                <action id="5" name="Set frame" sid="3123966874828627" type="Hands">
+                                    <param id="0" name="Frame number">0</param>
+                                </action>
                             </actions>
                         </event-block>
                         <event-block sid="8833473331204709">
@@ -762,6 +776,9 @@
                                 <action id="-3" name="Set position" sid="4741460236922111" type="Joystick2">
                                     <param id="0" name="X">ViewportRight(0) - Joystick2.Width / 2</param>
                                     <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
+                                </action>
+                                <action id="5" name="Set frame" sid="1473383189226129" type="Hands">
+                                    <param id="0" name="Frame number">1</param>
                                 </action>
                             </actions>
                         </event-block>
@@ -1750,6 +1767,87 @@
                     </actions>
                 </event-block>
             </sub-events>
+        </event-block>
+        <event-block sid="1634669989071704">
+            <conditions>
+                <condition id="17" name="On tap object" sid="5611512689813249" type="Touch">
+                    <param id="0" name="Object">Hands</param>
+                </condition>
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="3628935746868778">
+                    <conditions>
+                        <condition id="-14" name="Compare variable" sid="5139298655225265" type="System">
+                            <param id="0" name="Variable">control</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">&quot;left-handed&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="7580234443560664" type="System">
+                            <param id="0" name="Variable">control</param>
+                            <param id="1" name="Value">&quot;right-handed&quot;</param>
+                        </action>
+                        <action id="0" name="Call function" sid="6979313670265242" type="Function">
+                            <param id="0" name="Name">&quot;updateControls&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                        <action id="0" name="Set item" sid="4578307219602722" type="LocalStorage">
+                            <param id="0" name="Key">&quot;control&quot;</param>
+                            <param id="1" name="Value">control</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="8034558801106765">
+                    <conditions>
+                        <condition id="-22" name="Else" sid="8588819710550418" type="System" />
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="4134867702158811" type="System">
+                            <param id="0" name="Variable">control</param>
+                            <param id="1" name="Value">&quot;left-handed&quot;</param>
+                        </action>
+                        <action id="0" name="Call function" sid="6330340475923476" type="Function">
+                            <param id="0" name="Name">&quot;updateControls&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                        <action id="0" name="Set item" sid="5183457892094676" type="LocalStorage">
+                            <param id="0" name="Key">&quot;control&quot;</param>
+                            <param id="1" name="Value">control</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="6396808836176294">
+            <conditions>
+                <condition id="9" name="On item exists" sid="9213111394481516" type="LocalStorage">
+                    <param id="0" name="Key">&quot;control&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="1" name="Get item" sid="9952506941478479" type="LocalStorage">
+                    <param id="0" name="Key">&quot;control&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="6295266921281767">
+            <conditions>
+                <condition id="1" name="On item get" sid="2395559073213498" type="LocalStorage">
+                    <param id="0" name="Key">&quot;control&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="7382716438368559" type="System">
+                    <param id="0" name="Variable">control</param>
+                    <param id="1" name="Value">LocalStorage.ItemValue = &quot;right-handed&quot; ? &quot;right-handed&quot; : &quot;left-handed&quot;</param>
+                </action>
+                <action id="0" name="Call function" sid="1775030752827821" type="Function">
+                    <param id="0" name="Name">&quot;updateControls&quot;</param>
+                    <param id="1" name="Parameter {n}"></param>
+                </action>
+            </actions>
         </event-block>
     </events>
 </c2eventsheet>

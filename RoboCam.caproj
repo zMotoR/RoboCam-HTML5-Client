@@ -17,6 +17,7 @@
         <plugin author="Scirra" id="Dictionary" version="1">Dictionary</plugin>
         <plugin author="Scirra" id="Function" version="1">Function</plugin>
         <plugin author="Jesse Johnston" id="HTML_Img" version="1.299999952">HTML_Img</plugin>
+        <plugin author="Scirra" id="LocalStorage" version="1">Local storage</plugin>
         <plugin author="Scirra" id="Sprite" version="1">Sprite</plugin>
         <plugin author="Scirra" id="Text" version="1">Text</plugin>
         <plugin author="Scirra" id="Touch" version="1">Touch</plugin>
@@ -143,6 +144,40 @@
                 </animation>
             </animation-folder>
         </object-type>
+        <object-type name="Hands" sid="3461172665253951">
+            <plugin id="Sprite" />
+            <animation-folder>
+                <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="2152376871933132" speed="5">
+                    <frame duration="1" hotspotX="1" hotspotY="0" original-source="C:\Projects\HTML5\RoboCamImages\Hands-R.png">
+                        <collision-poly>
+                            <point x="0.216667" y="0.216667" />
+                            <point x="0.5" y="0.125" />
+                            <point x="0.783333" y="0.216667" />
+                            <point x="0.958333" y="0.5" />
+                            <point x="0.783333" y="0.783333" />
+                            <point x="0.5" y="0.875" />
+                            <point x="0.216667" y="0.783333" />
+                            <point x="0.0416667" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                    <frame duration="1" hotspotX="1" hotspotY="0" original-source="C:\Projects\HTML5\RoboCamImages\Hands-L.png">
+                        <collision-poly>
+                            <point x="0.216667" y="0.216667" />
+                            <point x="0.5" y="0.125" />
+                            <point x="0.783333" y="0.216667" />
+                            <point x="0.958333" y="0.5" />
+                            <point x="0.783333" y="0.783333" />
+                            <point x="0.5" y="0.875" />
+                            <point x="0.216667" y="0.783333" />
+                            <point x="0.0416667" y="0.5" />
+                        </collision-poly>
+                    </frame>
+                </animation>
+            </animation-folder>
+        </object-type>
+        <object-type name="LocalStorage" sid="4313712440618914">
+            <plugin id="LocalStorage" />
+        </object-type>
     </object-folder>
     <families />
     <layout-folder>
@@ -162,6 +197,7 @@
                 <use-mouse-input>Yes</use-mouse-input>
             </properties>
         </global-instance>
+        <global-instance type="LocalStorage" uid="16" />
     </global-instances>
     <sounds-folder />
     <music-folder />
