@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Functions</name>
+    <events>
+        <event-block sid="6458737241587084">
+            <conditions>
+                <condition id="0" name="On function" sid="7155339024319891" type="Function">
+                    <param id="0" name="Name">&quot;parseBrowserURL&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="-9" name="Set value" sid="6180656811411567" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">Browser.URL</param>
+                </action>
+                <action id="-9" name="Set value" sid="6451843715842954" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">Browser.QueryString &lt;&gt; &quot;&quot; ? (right(portStr, len(Browser.QueryString)) = Browser.QueryString ? left(portStr, len(portStr) - len(Browser.QueryString)) : portStr) : portStr</param>
+                </action>
+                <action id="-9" name="Set value" sid="8673091124178902" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">Browser.PathName &lt;&gt; &quot;&quot; ? (right(portStr, len(Browser.PathName)) = Browser.PathName ? left(portStr, len(portStr) - len(Browser.PathName)) : portStr) : portStr</param>
+                </action>
+                <action id="-9" name="Set value" sid="8535122169347461" type="System">
+                    <param id="0" name="Variable">httpRoot</param>
+                    <param id="1" name="Value">portStr</param>
+                </action>
+                <action id="-9" name="Set value" sid="6684498092437571" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">left(portStr, len(Browser.Protocol) + 2) = Browser.Protocol &amp; &quot;//&quot; ? right(portStr, len(portStr) - len(Browser.Protocol) - 2) : portStr</param>
+                </action>
+                <action id="-9" name="Set value" sid="5410260717360893" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">find(portStr, &quot;:&quot;) &gt;= 0 ?  right(portStr, len(portStr) - find(portStr, &quot;:&quot;) - 1) : &quot;80&quot;</param>
+                </action>
+                <action id="-9" name="Set value" sid="8736436044950856" type="System">
+                    <param id="0" name="Variable">port</param>
+                    <param id="1" name="Value">int(portStr) = 0 ? 80 : int(portStr)</param>
+                </action>
+                <action id="-9" name="Set value" sid="9796730061302627" type="System">
+                    <param id="0" name="Variable">portStr</param>
+                    <param id="1" name="Value">port = 80 ? &quot;&quot; : (&quot;:&quot; &amp; str(port))</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="4172954767617174">
+            <conditions>
+                <condition id="0" name="On function" sid="6285716670754196" type="Function">
+                    <param id="0" name="Name">&quot;getString&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="1" name="Set return value" sid="3042158802184612" type="Function">
+                    <param id="0" name="Value">StringsLocal.Get(Function.Param(0)) = 0 ? StringsDef.Get(Function.Param(0)) : StringsLocal.Get(Function.Param(0))</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="5122447963822262">
+            <conditions>
+                <condition id="0" name="On function" sid="4554522045904712" type="Function">
+                    <param id="0" name="Name">&quot;initStrings&quot;</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="4" name="Load" sid="7785635560897549" type="StringsDef">
+                    <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Error while reading application settings.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;WebSocket error: &quot;&quot;}}&quot;</param>
+                </action>
+                <action id="3" name="Clear" sid="8147845266169606" type="StringsLocal" />
+            </actions>
+            <sub-events>
+                <event-block sid="8181254618261045">
+                    <conditions>
+                        <condition id="-14" name="Compare variable" sid="6439569847141251" type="System">
+                            <param id="0" name="Variable">lang</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">&quot;ru&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="4" name="Load" sid="5709773902911013" type="StringsLocal">
+                            <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Ошибка во время загрузки настроек приложения.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;Ошибка WebSocket: &quot;&quot;}}&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="6133080345356746">
+            <conditions>
+                <condition id="0" name="On function" sid="2382658979923797" type="Function">
+                    <param id="0" name="Name">&quot;setLangByBrowserSettings&quot;</param>
+                </condition>
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="5669493280010352">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="4129088454620966" type="System">
+                            <param id="0" name="First value">lowercase(Browser.Language)</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Second value">&quot;ru&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="8361412489752878" type="System">
+                            <param id="0" name="Variable">lang</param>
+                            <param id="1" name="Value">&quot;ru&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+    </events>
+</c2eventsheet>
