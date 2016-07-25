@@ -52,6 +52,12 @@
                     <param id="0" name="Variable">domain</param>
                     <param id="1" name="Value">Browser.Domain</param>
                 </action>
+                <action id="0" name="Set text" sid="9839949412957336" type="Text">
+                    <param id="0" name="Text">&quot;&quot;</param>
+                </action>
+                <action id="0" name="Set text" sid="8739687159886804" type="DebugMessage">
+                    <param id="0" name="Text">&quot;&quot;</param>
+                </action>
                 <action id="0" name="Call function" sid="8397585716976853" type="Function">
                     <param id="0" name="Name">&quot;setLangByBrowserSettings&quot;</param>
                     <param id="1" name="Parameter {n}"></param>
@@ -86,24 +92,24 @@
                     <param id="0" name="Name">&quot;parseBrowserURL&quot;</param>
                     <param id="1" name="Parameter {n}"></param>
                 </action>
-                <action id="-9" name="Set value" sid="2699345239732379" type="System">
+                <action disabled="1" id="-9" name="Set value" sid="2699345239732379" type="System">
                     <param id="0" name="Variable">httpRoot</param>
                     <param id="1" name="Value">&quot;http://192.168.1.153:8088&quot;</param>
                 </action>
-                <action id="-9" name="Set value" sid="1166003675902851" type="System">
+                <action disabled="1" id="-9" name="Set value" sid="1166003675902851" type="System">
                     <param id="0" name="Variable">domain</param>
                     <param id="1" name="Value">&quot;192.168.1.153&quot;</param>
                 </action>
                 <action id="0" name="Request URL" sid="9244480264470922" type="AJAX">
                     <param id="0" name="Tag">&quot;settings&quot;</param>
-                    <param id="1" name="URL">httpRoot &amp; &quot;/settings&quot;</param>
+                    <param id="1" name="URL">httpRoot &amp; &quot;/settings?sm=&quot; &amp; min(Browser.ScreenWidth, Browser.ScreenHeight)</param>
                 </action>
                 <action id="0" name="Call function" sid="711448851962635" type="Function">
                     <param id="0" name="Name">&quot;updateControls&quot;</param>
                     <param id="1" name="Parameter {n}"></param>
                 </action>
-                <action disabled="1" id="0" name="Set text" sid="8018852409699049" type="Text">
-                    <param id="0" name="Text">Browser.Language</param>
+                <action disabled="1" id="0" name="Set text" sid="8018852409699049" type="DebugMessage">
+                    <param id="0" name="Text">httpRoot &amp; &quot;/settings?sw=&quot; &amp; Browser.ScreenWidth &amp; &quot;&amp;sh=&quot; &amp;Browser.ScreenHeight &amp; &quot;&amp;dpr=&quot; &amp; Browser.DevicePixelRatio</param>
                 </action>
                 <action id="5" name="Check item exists" sid="8832340574085047" type="LocalStorage">
                     <param id="0" name="Key">&quot;control&quot;</param>
@@ -117,7 +123,7 @@
                 </condition>
             </conditions>
             <actions>
-                <action disabled="1" id="0" name="Set text" sid="5118157008872657" type="Text">
+                <action disabled="1" id="0" name="Set text" sid="5118157008872657" type="DebugMessage">
                     <param id="0" name="Text">&quot;completed&quot; &amp; AJAX.LastData</param>
                 </action>
                 <action id="0" name="Load" sid="5680499627353368" type="XML">
@@ -126,11 +132,14 @@
                 <action id="0" name="Set image URL" sid="3377931305893026" type="Preview">
                     <param id="0" name="HTML">httpRoot &amp; &quot;/cam&quot;</param>
                 </action>
+                <action id="3" name="Set visible" sid="3730587945339847" type="Preview">
+                    <param id="0" name="Visibility">1</param>
+                </action>
                 <action id="0" name="Connect" sid="1084164076428802" type="WebSocket">
                     <param id="0" name="URL">&quot;ws://&quot; &amp; domain &amp; &quot;:&quot; &amp; XML.StringValue(&quot;/settings/cp&quot;) &amp; &quot;/channel?sk=&quot; &amp; XML.StringValue(&quot;/settings/sk&quot;)</param>
                     <param id="1" name="Protocol (optional)">&quot;&quot;</param>
                 </action>
-                <action id="0" name="Set text" sid="312392519684808" type="Text">
+                <action disabled="1" id="0" name="Set text" sid="312392519684808" type="Text">
                     <param id="0" name="Text">&quot;ws://&quot; &amp; domain &amp; &quot;:&quot; &amp; XML.StringValue(&quot;/settings/cp&quot;) &amp; &quot;/channel&quot;</param>
                 </action>
                 <action id="-9" name="Set value" sid="8341236966417981" type="System">
@@ -148,7 +157,7 @@
                 <action id="5" name="Check item exists" sid="8563908780899107" type="LocalStorage">
                     <param id="0" name="Key">&quot;joystickCurrentPanel&quot;</param>
                 </action>
-                <action disabled="1" id="0" name="Set text" sid="4421111666340565" type="Text">
+                <action disabled="1" id="0" name="Set text" sid="4421111666340565" type="DebugMessage">
                     <param id="0" name="Text">joystickShapes</param>
                 </action>
                 <action id="-9" name="Set value" sid="4683708751786568" type="System">
@@ -176,6 +185,48 @@
                     <param id="1" name="Parameter {n}"></param>
                 </action>
             </actions>
+            <sub-events>
+                <event-block sid="6421036770095711">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="6308764619156149" type="System">
+                            <param id="0" name="First value">XML.StringValue(&quot;/settings/bnp&quot;)</param>
+                            <param id="1" name="Comparison">1</param>
+                            <param id="2" name="Second value">&quot;&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set URL" sid="1730791319309162" type="Banner">
+                            <param id="0" name="URL">httpRoot &amp; XML.StringValue(&quot;/settings/bnp&quot;)</param>
+                        </action>
+                        <action disabled="1" id="-7" name="Set size" sid="9339639139149754" type="Banner">
+                            <param id="0" name="Width">int(XML.StringValue(&quot;/settings/bnw&quot;))</param>
+                            <param id="1" name="Height">int(XML.StringValue(&quot;/settings/bnh&quot;))</param>
+                        </action>
+                        <action id="3" name="Set visible" sid="2228293442115794" type="Banner">
+                            <param id="0" name="Visibility">1</param>
+                        </action>
+                        <action disabled="1" id="0" name="Set text" sid="1888174930434804" type="Text">
+                            <param id="0" name="Text">XML.StringValue(&quot;/settings/bnp&quot;)</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="1790085642925725" type="Banner">
+                            <param id="0" name="Instance variable">initWidth</param>
+                            <param id="1" name="Value">int(XML.StringValue(&quot;/settings/bnw&quot;))</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="9682749512634055" type="Banner">
+                            <param id="0" name="Instance variable">initHeight</param>
+                            <param id="1" name="Value">int(XML.StringValue(&quot;/settings/bnh&quot;))</param>
+                        </action>
+                        <action id="-10" name="Set value" sid="5724077157378131" type="Banner">
+                            <param id="0" name="Instance variable">url</param>
+                            <param id="1" name="Value">XML.StringValue(&quot;/settings/bnu&quot;)</param>
+                        </action>
+                        <action id="0" name="Call function" sid="9883666451153792" type="Function">
+                            <param id="0" name="Name">&quot;updateBannerSize&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
         </event-block>
         <event-block sid="9033832524629884">
             <conditions>
@@ -206,6 +257,12 @@
             <actions>
                 <action id="2" name="Send text" sid="4446913606627775" type="WebSocket">
                     <param id="0" name="Data">&quot;jv:x=0;y=0;z=0;w=0;a=0;b=0;c=0;d=0;&quot;</param>
+                </action>
+                <action id="0" name="Set text" sid="9797913978896868" type="Text">
+                    <param id="0" name="Text">&quot;&quot;</param>
+                </action>
+                <action id="0" name="Set text" sid="4807254179740765" type="DebugMessage">
+                    <param id="0" name="Text">&quot;&quot;</param>
                 </action>
             </actions>
         </event-block>
@@ -875,7 +932,48 @@
                             <param id="0" name="Name">&quot;updateControls&quot;</param>
                             <param id="1" name="Parameter {n}"></param>
                         </action>
+                        <action id="0" name="Call function" sid="7905163513247329" type="Function">
+                            <param id="0" name="Name">&quot;updateBannerSize&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
                     </actions>
+                </event-block>
+                <event-block sid="7806004828741104">
+                    <conditions>
+                        <condition id="0" name="On function" sid="7452947371865661" type="Function">
+                            <param id="0" name="Name">&quot;updateBannerSize&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="748119436667929">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="1184784377527621" type="Banner">
+                                    <param id="0" name="Instance variable">initWidth</param>
+                                    <param id="1" name="Comparison">4</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="5802137145391736" type="Banner">
+                                    <param id="0" name="Instance variable">initHeight</param>
+                                    <param id="1" name="Comparison">4</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-7" name="Set size" sid="9458488773430626" type="Banner">
+                                    <param id="0" name="Width">Banner.initWidth * (ViewportRight(0) - ViewportLeft(0)) / WindowWidth * Browser.DevicePixelRatio</param>
+                                    <param id="1" name="Height">Banner.initHeight * (ViewportBottom(0) - ViewportTop(0)) / WindowHeight * Browser.DevicePixelRatio</param>
+                                </action>
+                                <action id="-3" name="Set position" sid="3135879172665419" type="Banner">
+                                    <param id="0" name="X">(LayoutWidth - Banner.Width) / 2</param>
+                                    <param id="1" name="Y">ViewportTop(0)</param>
+                                </action>
+                                <action disabled="1" id="0" name="Set text" sid="7596332716854328" type="Text">
+                                    <param id="0" name="Text">WindowWidth &amp; &quot; - &quot; &amp; (ViewportRight(0) - ViewportLeft(0)) / WindowWidth &amp; &quot; - &quot; &amp; (ViewportBottom(0) - ViewportTop(0)) / WindowHeight &amp; &quot; - &quot; &amp; Banner.initWidth * (ViewportRight(0) - ViewportLeft(0)) / WindowWidth</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
                 </event-block>
                 <event-block sid="9410735097177219">
                     <conditions>
@@ -1323,8 +1421,8 @@
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="0" name="Set text" sid="5428448565486166" type="Text">
-                                    <param id="0" name="Text">&quot;jv:&quot; &amp; (x &lt;&gt; oldX ? &quot;x=&quot; &amp; x &amp; &quot;;&quot; : &quot;&quot;) &amp; (y &lt;&gt; oldY ? &quot;y=&quot; &amp; y &amp; &quot;;&quot; : &quot;&quot;) &amp; (w &lt;&gt; oldW ? &quot;w=&quot; &amp; w &amp; &quot;;&quot; : &quot;&quot;) &amp; (z &lt;&gt; oldZ ? &quot;z=&quot; &amp; z &amp; &quot;;&quot; : &quot;&quot;) &amp; (a &lt;&gt; oldA ? &quot;a=&quot; &amp; a &amp; &quot;;&quot; : &quot;&quot;) &amp; (b &lt;&gt; oldB ? &quot;b=&quot; &amp; b &amp; &quot;;&quot; : &quot;&quot;) &amp; (c &lt;&gt; oldC ? &quot;c=&quot; &amp; c &amp; &quot;;&quot; : &quot;&quot;) &amp; (d &lt;&gt; oldD ? &quot;d=&quot; &amp; d &amp; &quot;;&quot; : &quot;&quot;)</param>
+                                <action id="0" name="Set text" sid="5428448565486166" type="DebugMessage">
+                                    <param id="0" name="Text">(x &lt;&gt; oldX ? &quot;x=&quot; &amp; x &amp; &quot;;&quot; : &quot;&quot;) &amp; (y &lt;&gt; oldY ? &quot;y=&quot; &amp; y &amp; &quot;;&quot; : &quot;&quot;) &amp; (w &lt;&gt; oldW ? &quot;w=&quot; &amp; w &amp; &quot;;&quot; : &quot;&quot;) &amp; (z &lt;&gt; oldZ ? &quot;z=&quot; &amp; z &amp; &quot;;&quot; : &quot;&quot;) &amp; (a &lt;&gt; oldA ? &quot;a=&quot; &amp; a &amp; &quot;;&quot; : &quot;&quot;) &amp; (b &lt;&gt; oldB ? &quot;b=&quot; &amp; b &amp; &quot;;&quot; : &quot;&quot;) &amp; (c &lt;&gt; oldC ? &quot;c=&quot; &amp; c &amp; &quot;;&quot; : &quot;&quot;) &amp; (d &lt;&gt; oldD ? &quot;d=&quot; &amp; d &amp; &quot;;&quot; : &quot;&quot;)</param>
                                 </action>
                                 <action id="2" name="Send text" sid="3262906518975548" type="WebSocket">
                                     <param id="0" name="Data">&quot;jv:&quot; &amp; (x &lt;&gt; oldX ? &quot;x=&quot; &amp; x &amp; &quot;;&quot; : &quot;&quot;) &amp; (y &lt;&gt; oldY ? &quot;y=&quot; &amp; y &amp; &quot;;&quot; : &quot;&quot;) &amp; (w &lt;&gt; oldW ? &quot;w=&quot; &amp; w &amp; &quot;;&quot; : &quot;&quot;) &amp; (z &lt;&gt; oldZ ? &quot;z=&quot; &amp; z &amp; &quot;;&quot; : &quot;&quot;) &amp; (a &lt;&gt; oldA ? &quot;a=&quot; &amp; a &amp; &quot;;&quot; : &quot;&quot;) &amp; (b &lt;&gt; oldB ? &quot;b=&quot; &amp; b &amp; &quot;;&quot; : &quot;&quot;) &amp; (c &lt;&gt; oldC ? &quot;c=&quot; &amp; c &amp; &quot;;&quot; : &quot;&quot;) &amp; (d &lt;&gt; oldD ? &quot;d=&quot; &amp; d &amp; &quot;;&quot; : &quot;&quot;)</param>
@@ -1712,7 +1810,7 @@
                 <condition id="3" name="On message" sid="7926782459142222" type="WebSocket" />
             </conditions>
             <actions>
-                <action id="0" name="Set text" sid="5336787819370362" type="Text">
+                <action disabled="1" id="0" name="Set text" sid="5336787819370362" type="Text">
                     <param id="0" name="Text">WebSocket.MessageText</param>
                 </action>
                 <action id="0" name="Load" sid="9949131624166032" type="WebSocketXML">
@@ -2047,6 +2145,35 @@
                         <action id="0" name="Set item" sid="3267468894102383" type="LocalStorage">
                             <param id="0" name="Key">&quot;joystickCurrentPanel&quot;</param>
                             <param id="1" name="Value">&quot;0&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="1501307806954036">
+            <conditions>
+                <condition id="17" name="On tap object" sid="5666166994826372" type="Touch">
+                    <param id="0" name="Object">Banner</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action disabled="1" id="0" name="Set text" sid="2723654505612153" type="Text">
+                    <param id="0" name="Text">Banner.url</param>
+                </action>
+            </actions>
+            <sub-events>
+                <event-block sid="2483009191622273">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="3480511834999426" type="Banner">
+                            <param id="0" name="Instance variable">url</param>
+                            <param id="1" name="Comparison">1</param>
+                            <param id="2" name="Value">&quot;&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="8" name="Open URL in new window" sid="1688236531539321" type="Browser">
+                            <param id="0" name="URL">Banner.url</param>
+                            <param id="1" name="Tag">&quot;NewWindow&quot;</param>
                         </action>
                     </actions>
                 </event-block>
