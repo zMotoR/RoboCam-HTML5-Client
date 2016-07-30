@@ -3,6 +3,7 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>MainEvents</name>
     <events>
+        <variable constant="0" name="lastTestMessageTime" sid="8355941067121701" static="0" type="number">0</variable>
         <variable constant="0" name="testCount" sid="7090902380437229" static="0" type="number">0</variable>
         <variable constant="0" name="pictureHeight" sid="2537512275349522" static="0" type="number">0</variable>
         <variable constant="0" name="pictureWidth" sid="4439639181443535" static="0" type="number">0</variable>
@@ -1363,6 +1364,10 @@
                             <param id="0" name="Name">&quot;sendJoystickValues&quot;</param>
                             <param id="1" name="Parameter {n}"></param>
                         </action>
+                        <action id="0" name="Call function" sid="4945109371656173" type="Function">
+                            <param id="0" name="Name">&quot;sendTestMessage&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
                     </actions>
                 </event-block>
                 <event-block sid="1991613631421243">
@@ -1868,6 +1873,23 @@
                         </action>
                     </actions>
                 </event-block>
+                <event-block sid="1216189018121421">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="3995575014260222" type="System">
+                            <param id="0" name="First value">WebSocketXML.StringValue(&quot;/msg/name&quot;)</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Second value">&quot;connectionWasBroken&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="1420920878078573" type="Text">
+                            <param id="0" name="Text">Function.Call(&quot;getString&quot;, &quot;connection_was_broken&quot;) &amp; newline &amp; WebSocketXML.StringValue(&quot;/msg/reason&quot;)</param>
+                        </action>
+                        <action disabled="1" id="0" name="Set text" sid="5422214256636586" type="DebugMessage">
+                            <param id="0" name="Text">WebSocketXML.StringValue(&quot;/msg/reason&quot;)</param>
+                        </action>
+                    </actions>
+                </event-block>
             </sub-events>
         </event-block>
         <variable constant="0" name="tempHorzCoord" sid="9613984836982555" static="0" type="number">0</variable>
@@ -1921,7 +1943,7 @@
                 </event-block>
             </sub-events>
         </event-block>
-        <event-block sid="3452850435980721">
+        <event-block disabled="1" sid="3452850435980721">
             <conditions>
                 <condition id="-6" name="Every X seconds" sid="4114530996413118" type="System">
                     <param id="0" name="Interval (seconds)">1.0</param>
@@ -1940,6 +1962,41 @@
                         </action>
                         <action id="2" name="Send text" sid="7730355753499882" type="WebSocket">
                             <param id="0" name="Data">&quot;tst:&quot; &amp; testCount</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="6059721778127922">
+            <conditions>
+                <condition id="0" name="On function" sid="6104062439660485" type="Function">
+                    <param id="0" name="Name">&quot;sendTestMessage&quot;</param>
+                </condition>
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="3977886509027553">
+                    <conditions>
+                        <condition id="-8" name="Compare two values" sid="2664120772878257" type="System">
+                            <param id="0" name="First value">time</param>
+                            <param id="1" name="Comparison">5</param>
+                            <param id="2" name="Second value">lastTestMessageTime + 1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="4781990177346349" type="System">
+                            <param id="0" name="Variable">testCount</param>
+                            <param id="1" name="Value">testCount &gt;= 100 ? 0 : (testCount + 1)</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="6486591019426636" type="System">
+                            <param id="0" name="Variable">lastTestMessageTime</param>
+                            <param id="1" name="Value">time</param>
+                        </action>
+                        <action id="2" name="Send text" sid="2784092926439971" type="WebSocket">
+                            <param id="0" name="Data">&quot;tst:&quot; &amp; testCount</param>
+                        </action>
+                        <action disabled="1" id="0" name="Set text" sid="3275451406612377" type="Text">
+                            <param id="0" name="Text">time</param>
                         </action>
                     </actions>
                 </event-block>

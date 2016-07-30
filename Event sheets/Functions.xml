@@ -64,7 +64,7 @@
             </conditions>
             <actions>
                 <action id="4" name="Load" sid="7785635560897549" type="StringsDef">
-                    <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Error while reading application settings.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;WebSocket error: &quot;&quot;}}&quot;</param>
+                    <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Error while reading application settings.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;WebSocket error: &quot;&quot;,&quot;&quot;connection_was_broken&quot;&quot;:&quot;&quot;Connection was broken by the server. Reason: &quot;&quot;}}&quot;</param>
                 </action>
                 <action id="3" name="Clear" sid="8147845266169606" type="StringsLocal" />
             </actions>
@@ -79,7 +79,7 @@
                     </conditions>
                     <actions>
                         <action id="4" name="Load" sid="5709773902911013" type="StringsLocal">
-                            <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Ошибка во время загрузки настроек приложения.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;Ошибка WebSocket: &quot;&quot;}}&quot;</param>
+                            <param id="0" name="JSON">&quot;{&quot;&quot;c2dictionary&quot;&quot;:true,&quot;&quot;data&quot;&quot;:{&quot;&quot;error_while_reading_settings&quot;&quot;:&quot;&quot;Ошибка во время загрузки настроек приложения.&quot;&quot;,&quot;&quot;web_socket_error&quot;&quot;:&quot;&quot;Ошибка WebSocket: &quot;&quot;,&quot;&quot;connection_was_broken&quot;&quot;:&quot;&quot;Соединение разорвано сервером. Причина: &quot;&quot;}}&quot;</param>
                         </action>
                     </actions>
                 </event-block>
