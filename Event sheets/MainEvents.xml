@@ -3,6 +3,12 @@
     <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
     <name>MainEvents</name>
     <events>
+        <variable constant="0" name="showDebugInfo" sid="2447692801898707" static="0" type="number">1</variable>
+        <variable constant="0" name="showJoysticks" sid="6960568052552574" static="0" type="number">1</variable>
+        <variable constant="0" name="hideJoysticks" sid="3715489092185918" static="0" type="number">1</variable>
+        <variable constant="0" name="oldPressedKeys" sid="5667230809520629" static="0" type="text"></variable>
+        <variable constant="0" name="pressedKeys" sid="5034488240580791" static="0" type="text"></variable>
+        <variable constant="0" name="usedKeys" sid="1762478173707329" static="0" type="text"></variable>
         <variable constant="0" name="lastTestMessageTime" sid="8355941067121701" static="0" type="number">0</variable>
         <variable constant="0" name="testCount" sid="7090902380437229" static="0" type="number">0</variable>
         <variable constant="0" name="pictureHeight" sid="2537512275349522" static="0" type="number">0</variable>
@@ -105,6 +111,9 @@
                     <param id="0" name="Tag">&quot;settings&quot;</param>
                     <param id="1" name="URL">httpRoot &amp; &quot;/settings?sm=&quot; &amp; min(Browser.ScreenWidth, Browser.ScreenHeight)</param>
                 </action>
+                <action id="0" name="Set text" sid="4782663684317046" type="Text">
+                    <param id="0" name="Text">Function.Call(&quot;getString&quot;, &quot;connecting&quot;)</param>
+                </action>
                 <action id="0" name="Call function" sid="711448851962635" type="Function">
                     <param id="0" name="Name">&quot;updateControls&quot;</param>
                     <param id="1" name="Parameter {n}"></param>
@@ -124,6 +133,9 @@
                 </condition>
             </conditions>
             <actions>
+                <action disabled="1" id="0" name="Set text" sid="8775347879497744" type="Text">
+                    <param id="0" name="Text">&quot;&quot;</param>
+                </action>
                 <action disabled="1" id="0" name="Set text" sid="5118157008872657" type="DebugMessage">
                     <param id="0" name="Text">&quot;completed&quot; &amp; AJAX.LastData</param>
                 </action>
@@ -147,9 +159,21 @@
                     <param id="0" name="Variable">joystickBehaviors</param>
                     <param id="1" name="Value">XML.StringValue(&quot;/settings/jb&quot;)</param>
                 </action>
+                <action id="-9" name="Set value" sid="3874701239659458" type="System">
+                    <param id="0" name="Variable">usedKeys</param>
+                    <param id="1" name="Value">XML.StringValue(&quot;/settings/kb&quot;)</param>
+                </action>
                 <action id="-9" name="Set value" sid="2237650216530537" type="System">
                     <param id="0" name="Variable">joystickShapes</param>
                     <param id="1" name="Value">XML.StringValue(&quot;/settings/js&quot;)</param>
+                </action>
+                <action id="-9" name="Set value" sid="1560373268980744" type="System">
+                    <param id="0" name="Variable">hideJoysticks</param>
+                    <param id="1" name="Value">XML.StringValue(&quot;/settings/hj&quot;) = &quot;1&quot; ? 1 : 0</param>
+                </action>
+                <action id="-9" name="Set value" sid="5829327055862493" type="System">
+                    <param id="0" name="Variable">showDebugInfo</param>
+                    <param id="1" name="Value">XML.StringValue(&quot;/settings/di&quot;) = &quot;1&quot; ? 1 : 0</param>
                 </action>
                 <action id="-9" name="Set value" sid="3241194042397787" type="System">
                     <param id="0" name="Variable">joystickCurrentPanel</param>
@@ -259,6 +283,9 @@
                 <action id="2" name="Send text" sid="4446913606627775" type="WebSocket">
                     <param id="0" name="Data">&quot;jv:x=0;y=0;z=0;w=0;a=0;b=0;c=0;d=0;&quot;</param>
                 </action>
+                <action id="2" name="Send text" sid="9635561069359935" type="WebSocket">
+                    <param id="0" name="Data">&quot;kp:000&quot;</param>
+                </action>
                 <action id="0" name="Set text" sid="9797913978896868" type="Text">
                     <param id="0" name="Text">&quot;&quot;</param>
                 </action>
@@ -285,516 +312,541 @@
                         </action>
                     </actions>
                     <sub-events>
-                        <event-block sid="2311431746583287">
+                        <event-block sid="2470736120150318">
                             <conditions>
-                                <condition id="-14" name="Compare variable" sid="6415338479535585" type="System">
-                                    <param id="0" name="Variable">joystickCurrentPanel</param>
+                                <condition id="-14" name="Compare variable" sid="4004894759469613" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
                                     <param id="1" name="Comparison">0</param>
-                                    <param id="2" name="Value">0</param>
+                                    <param id="2" name="Value">1</param>
                                 </condition>
                             </conditions>
                             <actions />
                             <sub-events>
-                                <event-block sid="7259927442477105">
+                                <event-block sid="2311431746583287">
                                     <conditions>
-                                        <condition id="-8" name="Compare two values" sid="9322572857966843" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                        <condition id="-14" name="Compare variable" sid="6415338479535585" type="System">
+                                            <param id="0" name="Variable">joystickCurrentPanel</param>
                                             <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;v&quot;</param>
+                                            <param id="2" name="Value">0</param>
                                         </condition>
                                     </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="6743547945231962" type="Joystick1">
-                                            <param id="0" name="Frame number">0</param>
-                                        </action>
-                                    </actions>
+                                    <actions />
+                                    <sub-events>
+                                        <event-block sid="7259927442477105">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="9322572857966843" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;v&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="6743547945231962" type="Joystick1">
+                                                    <param id="0" name="Frame number">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="2306309860541178">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="1850485092887555" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;c&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="9755906064542496" type="Joystick1">
+                                                    <param id="0" name="Frame number">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="6126701388010426">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="4603365000772514" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;q&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="124500325760297" type="Joystick1">
+                                                    <param id="0" name="Frame number">2</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="7315468483543779">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="2410295327859226" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;a&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="3767904845086814" type="Joystick1">
+                                                    <param id="0" name="Frame number">3</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="1951818725935477">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="9076580777085793" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;h&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="8248168003955179" type="Joystick1">
+                                                    <param id="0" name="Frame number">4</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4088551430426975">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="5701851213004932" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;t&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1417476098510963" type="Joystick1">
+                                                    <param id="0" name="Frame number">5</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4385438019907672">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="6815614866078866" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;l&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="8411415939930503" type="Joystick1">
+                                                    <param id="0" name="Frame number">6</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="7961863486251657">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="755420323651793" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;-&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="8740633875115846" type="Joystick1">
+                                                    <param id="0" name="Visibility">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4887182656625799">
+                                            <conditions>
+                                                <condition id="-22" name="Else" sid="2777848512009143" type="System" />
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="4950915173103304" type="Joystick1">
+                                                    <param id="0" name="Visibility">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="3052834427366634">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="588748577227586" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;v&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="991829121955076" type="Joystick2">
+                                                    <param id="0" name="Frame number">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="1332389059160107">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="3077524482910818" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;c&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="9907227452664703" type="Joystick2">
+                                                    <param id="0" name="Frame number">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="869274093539319">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="9208177520693874" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;q&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5220296167031373" type="Joystick2">
+                                                    <param id="0" name="Frame number">2</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="8367219236894681">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="4444185057301407" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;a&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1490370702127033" type="Joystick2">
+                                                    <param id="0" name="Frame number">3</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="5021685997028746">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="2701725361603199" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;h&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5119774178727313" type="Joystick2">
+                                                    <param id="0" name="Frame number">4</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="7711754146637676">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="9965963281177645" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;t&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5176781672438689" type="Joystick2">
+                                                    <param id="0" name="Frame number">5</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="6296339110842758">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="8218041331287345" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;l&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1060195909892481" type="Joystick2">
+                                                    <param id="0" name="Frame number">6</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="83531520995859">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="1537221274735854" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;-&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="5949866044810997" type="Joystick2">
+                                                    <param id="0" name="Visibility">0</param>
+                                                </action>
+                                                <action disabled="1" id="0" name="Set text" sid="8449411929741356" type="Text">
+                                                    <param id="0" name="Text">&quot;vis&quot;</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="3082453963093856">
+                                            <conditions>
+                                                <condition id="-22" name="Else" sid="564696852815417" type="System" />
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="1255800314131982" type="Joystick2">
+                                                    <param id="0" name="Visibility">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
                                 </event-block>
-                                <event-block sid="2306309860541178">
+                                <event-block sid="8485441644021405">
                                     <conditions>
-                                        <condition id="-8" name="Compare two values" sid="1850485092887555" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;c&quot;</param>
-                                        </condition>
+                                        <condition id="-22" name="Else" sid="8931202422118063" type="System" />
                                     </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="9755906064542496" type="Joystick1">
-                                            <param id="0" name="Frame number">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="6126701388010426">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="4603365000772514" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;q&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="124500325760297" type="Joystick1">
-                                            <param id="0" name="Frame number">2</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="7315468483543779">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="2410295327859226" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;a&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="3767904845086814" type="Joystick1">
-                                            <param id="0" name="Frame number">3</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="1951818725935477">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="9076580777085793" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;h&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="8248168003955179" type="Joystick1">
-                                            <param id="0" name="Frame number">4</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="4088551430426975">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="5701851213004932" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;t&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1417476098510963" type="Joystick1">
-                                            <param id="0" name="Frame number">5</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="4385438019907672">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="6815614866078866" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;l&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="8411415939930503" type="Joystick1">
-                                            <param id="0" name="Frame number">6</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="7961863486251657">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="755420323651793" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;-&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="8740633875115846" type="Joystick1">
-                                            <param id="0" name="Visibility">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="4887182656625799">
-                                    <conditions>
-                                        <condition id="-22" name="Else" sid="2777848512009143" type="System" />
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="4950915173103304" type="Joystick1">
-                                            <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="3052834427366634">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="588748577227586" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;v&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="991829121955076" type="Joystick2">
-                                            <param id="0" name="Frame number">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="1332389059160107">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="3077524482910818" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;c&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="9907227452664703" type="Joystick2">
-                                            <param id="0" name="Frame number">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="869274093539319">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="9208177520693874" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;q&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5220296167031373" type="Joystick2">
-                                            <param id="0" name="Frame number">2</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="8367219236894681">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="4444185057301407" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;a&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1490370702127033" type="Joystick2">
-                                            <param id="0" name="Frame number">3</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="5021685997028746">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="2701725361603199" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;h&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5119774178727313" type="Joystick2">
-                                            <param id="0" name="Frame number">4</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="7711754146637676">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="9965963281177645" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;t&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5176781672438689" type="Joystick2">
-                                            <param id="0" name="Frame number">5</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="6296339110842758">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="8218041331287345" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;l&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1060195909892481" type="Joystick2">
-                                            <param id="0" name="Frame number">6</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="83531520995859">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="1537221274735854" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 2), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;-&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="5949866044810997" type="Joystick2">
-                                            <param id="0" name="Visibility">0</param>
-                                        </action>
-                                        <action disabled="1" id="0" name="Set text" sid="8449411929741356" type="Text">
-                                            <param id="0" name="Text">&quot;vis&quot;</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="3082453963093856">
-                                    <conditions>
-                                        <condition id="-22" name="Else" sid="564696852815417" type="System" />
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="1255800314131982" type="Joystick2">
-                                            <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
+                                    <actions />
+                                    <sub-events>
+                                        <event-block sid="4077120296551922">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="5772119543514222" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;v&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="262956147423086" type="Joystick1">
+                                                    <param id="0" name="Frame number">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="5017067218786893">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="6513455807884666" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;c&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="6416678591020069" type="Joystick1">
+                                                    <param id="0" name="Frame number">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="5661593422313555">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="9355339944882518" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;q&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1925201030968892" type="Joystick1">
+                                                    <param id="0" name="Frame number">2</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="2045737882426598">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="2945218960143807" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;a&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1305403044345841" type="Joystick1">
+                                                    <param id="0" name="Frame number">3</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="344606052255423">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="2776079200284899" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;h&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5173170274111749" type="Joystick1">
+                                                    <param id="0" name="Frame number">4</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4745672297123242">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="7840764724522697" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;t&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="4105905788450294" type="Joystick1">
+                                                    <param id="0" name="Frame number">5</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="1546272153823831">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="524954704313949" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;l&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="8898789008759926" type="Joystick1">
+                                                    <param id="0" name="Frame number">6</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="4518944516788695">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="8183336145915392" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;-&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="3462843421167943" type="Joystick1">
+                                                    <param id="0" name="Visibility">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="8746186684462889">
+                                            <conditions>
+                                                <condition id="-22" name="Else" sid="6520444005580216" type="System" />
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="2454521365634271" type="Joystick1">
+                                                    <param id="0" name="Visibility">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="7706817950209533">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="383291885148775" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;v&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5168744314308559" type="Joystick2">
+                                                    <param id="0" name="Frame number">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="8647521306943056">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="117684783736383" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;c&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="8443965597911774" type="Joystick2">
+                                                    <param id="0" name="Frame number">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="8012182782664364">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="3004286907937782" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;q&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="874675791552099" type="Joystick2">
+                                                    <param id="0" name="Frame number">2</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="370650383691096">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="1953093324252266" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;a&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="2346505288619969" type="Joystick2">
+                                                    <param id="0" name="Frame number">3</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="205297886294832">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="816363077390811" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;h&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="1938007975122855" type="Joystick2">
+                                                    <param id="0" name="Frame number">4</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="5696834300703586">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="7659580456870595" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;t&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="7660990177561835" type="Joystick2">
+                                                    <param id="0" name="Frame number">5</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="8330773800727901">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="7422929620957997" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;l&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="5" name="Set frame" sid="5686142246593981" type="Joystick2">
+                                                    <param id="0" name="Frame number">6</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="1644198608101705">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="8722648555960045" type="System">
+                                                    <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">&quot;-&quot;</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="5013264374107021" type="Joystick2">
+                                                    <param id="0" name="Visibility">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="589549030569083">
+                                            <conditions>
+                                                <condition id="-22" name="Else" sid="673911739935482" type="System" />
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="9428285646666233" type="Joystick2">
+                                                    <param id="0" name="Visibility">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
                                 </event-block>
                             </sub-events>
                         </event-block>
-                        <event-block sid="8485441644021405">
+                        <event-block sid="6574176846900601">
                             <conditions>
-                                <condition id="-22" name="Else" sid="8931202422118063" type="System" />
+                                <condition id="-22" name="Else" sid="5756604097391194" type="System" />
                             </conditions>
-                            <actions />
-                            <sub-events>
-                                <event-block sid="4077120296551922">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="5772119543514222" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;v&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="262956147423086" type="Joystick1">
-                                            <param id="0" name="Frame number">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="5017067218786893">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="6513455807884666" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;c&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="6416678591020069" type="Joystick1">
-                                            <param id="0" name="Frame number">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="5661593422313555">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="9355339944882518" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;q&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1925201030968892" type="Joystick1">
-                                            <param id="0" name="Frame number">2</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="2045737882426598">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="2945218960143807" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;a&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1305403044345841" type="Joystick1">
-                                            <param id="0" name="Frame number">3</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="344606052255423">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="2776079200284899" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;h&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5173170274111749" type="Joystick1">
-                                            <param id="0" name="Frame number">4</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="4745672297123242">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="7840764724522697" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;t&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="4105905788450294" type="Joystick1">
-                                            <param id="0" name="Frame number">5</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="1546272153823831">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="524954704313949" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;l&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="8898789008759926" type="Joystick1">
-                                            <param id="0" name="Frame number">6</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="4518944516788695">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="8183336145915392" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 3), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;-&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="3462843421167943" type="Joystick1">
-                                            <param id="0" name="Visibility">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="8746186684462889">
-                                    <conditions>
-                                        <condition id="-22" name="Else" sid="6520444005580216" type="System" />
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="2454521365634271" type="Joystick1">
-                                            <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="7706817950209533">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="383291885148775" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;v&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5168744314308559" type="Joystick2">
-                                            <param id="0" name="Frame number">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="8647521306943056">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="117684783736383" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;c&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="8443965597911774" type="Joystick2">
-                                            <param id="0" name="Frame number">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="8012182782664364">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="3004286907937782" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;q&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="874675791552099" type="Joystick2">
-                                            <param id="0" name="Frame number">2</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="370650383691096">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="1953093324252266" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;a&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="2346505288619969" type="Joystick2">
-                                            <param id="0" name="Frame number">3</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="205297886294832">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="816363077390811" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;h&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="1938007975122855" type="Joystick2">
-                                            <param id="0" name="Frame number">4</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="5696834300703586">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="7659580456870595" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;t&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="7660990177561835" type="Joystick2">
-                                            <param id="0" name="Frame number">5</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="8330773800727901">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="7422929620957997" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;l&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="5" name="Set frame" sid="5686142246593981" type="Joystick2">
-                                            <param id="0" name="Frame number">6</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="1644198608101705">
-                                    <conditions>
-                                        <condition id="-8" name="Compare two values" sid="8722648555960045" type="System">
-                                            <param id="0" name="First value">right(left(joystickShapes, 4), 1)</param>
-                                            <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">&quot;-&quot;</param>
-                                        </condition>
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="5013264374107021" type="Joystick2">
-                                            <param id="0" name="Visibility">0</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                                <event-block sid="589549030569083">
-                                    <conditions>
-                                        <condition id="-22" name="Else" sid="673911739935482" type="System" />
-                                    </conditions>
-                                    <actions>
-                                        <action id="-15" name="Set visible" sid="9428285646666233" type="Joystick2">
-                                            <param id="0" name="Visibility">1</param>
-                                        </action>
-                                    </actions>
-                                </event-block>
-                            </sub-events>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="8643402560199737" type="Joystick1">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="2840803641869869" type="Joystick2">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                            </actions>
                         </event-block>
                     </sub-events>
                 </event-block>
@@ -822,98 +874,130 @@
                         </action>
                     </actions>
                     <sub-events>
-                        <event-block sid="3406869816688723">
+                        <event-block sid="3325675374407581">
                             <conditions>
-                                <condition id="-14" name="Compare variable" sid="4406019715768859" type="System">
-                                    <param id="0" name="Variable">control</param>
+                                <condition id="-14" name="Compare variable" sid="311002389898355" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
                                     <param id="1" name="Comparison">0</param>
-                                    <param id="2" name="Value">&quot;left-handed&quot;</param>
+                                    <param id="2" name="Value">1</param>
                                 </condition>
                             </conditions>
                             <actions>
-                                <action id="-3" name="Set position" sid="9681463879801257" type="Joystick1">
-                                    <param id="0" name="X">ViewportRight(0) - Joystick1.Width / 2</param>
-                                    <param id="1" name="Y">ViewportBottom(0) - Joystick1.Height / 2</param>
+                                <action id="-15" name="Set visible" sid="434847374327061" type="Hands">
+                                    <param id="0" name="Visibility">1</param>
                                 </action>
-                                <action id="-3" name="Set position" sid="6220717948664814" type="Joystick2">
-                                    <param id="0" name="X">ViewportLeft(0) + Joystick2.Width / 2</param>
-                                    <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
-                                </action>
-                                <action id="5" name="Set frame" sid="3123966874828627" type="Hands">
-                                    <param id="0" name="Frame number">0</param>
-                                </action>
-                            </actions>
-                        </event-block>
-                        <event-block sid="8833473331204709">
-                            <conditions>
-                                <condition id="-22" name="Else" sid="8191811347584731" type="System" />
-                            </conditions>
-                            <actions>
-                                <action id="-3" name="Set position" sid="7082851528549659" type="Joystick1">
-                                    <param id="0" name="X">ViewportLeft(0) + Joystick1.Width / 2</param>
-                                    <param id="1" name="Y">ViewportBottom(0) - Joystick1.Height / 2</param>
-                                </action>
-                                <action id="-3" name="Set position" sid="4741460236922111" type="Joystick2">
-                                    <param id="0" name="X">ViewportRight(0) - Joystick2.Width / 2</param>
-                                    <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
-                                </action>
-                                <action id="5" name="Set frame" sid="1473383189226129" type="Hands">
-                                    <param id="0" name="Frame number">1</param>
-                                </action>
-                            </actions>
-                        </event-block>
-                        <event-block sid="2202025916115224">
-                            <conditions>
-                                <condition id="-14" name="Compare variable" sid="2162487896978612" type="System">
-                                    <param id="0" name="Variable">joystickShapes</param>
-                                    <param id="1" name="Comparison">0</param>
-                                    <param id="2" name="Value">&quot;----&quot;</param>
-                                </condition>
-                            </conditions>
-                            <actions>
-                                <action id="-15" name="Set visible" sid="4079488711147601" type="CurrentJoystick">
-                                    <param id="0" name="Visibility">0</param>
-                                </action>
-                                <action id="-15" name="Set visible" sid="7232410462956003" type="Hands">
-                                    <param id="0" name="Visibility">0</param>
-                                </action>
-                            </actions>
-                        </event-block>
-                        <event-block sid="769375310779687">
-                            <conditions>
-                                <condition id="-22" name="Else" sid="6055865767479393" type="System" />
-                            </conditions>
-                            <actions>
-                                <action id="-15" name="Set visible" sid="7360486952526212" type="Hands">
+                                <action id="-15" name="Set visible" sid="1124453311996555" type="CurrentJoystick">
                                     <param id="0" name="Visibility">1</param>
                                 </action>
                             </actions>
                             <sub-events>
-                                <event-block sid="294835269832736">
+                                <event-block sid="3406869816688723">
                                     <conditions>
-                                        <condition id="-8" name="Compare two values" sid="1651872845577164" type="System">
-                                            <param id="0" name="First value">left(joystickShapes, 2) = &quot;--&quot; | right(joystickShapes, 2) = &quot;--&quot; ? 1 : 0</param>
+                                        <condition id="-14" name="Compare variable" sid="4406019715768859" type="System">
+                                            <param id="0" name="Variable">control</param>
                                             <param id="1" name="Comparison">0</param>
-                                            <param id="2" name="Second value">1</param>
+                                            <param id="2" name="Value">&quot;left-handed&quot;</param>
                                         </condition>
                                     </conditions>
                                     <actions>
-                                        <action id="-15" name="Set visible" sid="6494408576290458" type="CurrentJoystick">
+                                        <action id="-3" name="Set position" sid="9681463879801257" type="Joystick1">
+                                            <param id="0" name="X">ViewportRight(0) - Joystick1.Width / 2</param>
+                                            <param id="1" name="Y">ViewportBottom(0) - Joystick1.Height / 2</param>
+                                        </action>
+                                        <action id="-3" name="Set position" sid="6220717948664814" type="Joystick2">
+                                            <param id="0" name="X">ViewportLeft(0) + Joystick2.Width / 2</param>
+                                            <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
+                                        </action>
+                                        <action id="5" name="Set frame" sid="3123966874828627" type="Hands">
+                                            <param id="0" name="Frame number">0</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="8833473331204709">
+                                    <conditions>
+                                        <condition id="-22" name="Else" sid="8191811347584731" type="System" />
+                                    </conditions>
+                                    <actions>
+                                        <action id="-3" name="Set position" sid="7082851528549659" type="Joystick1">
+                                            <param id="0" name="X">ViewportLeft(0) + Joystick1.Width / 2</param>
+                                            <param id="1" name="Y">ViewportBottom(0) - Joystick1.Height / 2</param>
+                                        </action>
+                                        <action id="-3" name="Set position" sid="4741460236922111" type="Joystick2">
+                                            <param id="0" name="X">ViewportRight(0) - Joystick2.Width / 2</param>
+                                            <param id="1" name="Y">ViewportBottom(0) - Joystick2.Height / 2</param>
+                                        </action>
+                                        <action id="5" name="Set frame" sid="1473383189226129" type="Hands">
+                                            <param id="0" name="Frame number">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="2202025916115224">
+                                    <conditions>
+                                        <condition id="-14" name="Compare variable" sid="2162487896978612" type="System">
+                                            <param id="0" name="Variable">joystickShapes</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">&quot;----&quot;</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-15" name="Set visible" sid="4079488711147601" type="CurrentJoystick">
+                                            <param id="0" name="Visibility">0</param>
+                                        </action>
+                                        <action id="-15" name="Set visible" sid="7232410462956003" type="Hands">
                                             <param id="0" name="Visibility">0</param>
                                         </action>
                                     </actions>
                                 </event-block>
-                                <event-block sid="593025944442571">
+                                <event-block sid="769375310779687">
                                     <conditions>
-                                        <condition id="-22" name="Else" sid="5566815524331624" type="System" />
+                                        <condition id="-22" name="Else" sid="6055865767479393" type="System" />
                                     </conditions>
                                     <actions>
-                                        <action id="-15" name="Set visible" sid="4684988868530845" type="CurrentJoystick">
+                                        <action id="-15" name="Set visible" sid="7360486952526212" type="Hands">
                                             <param id="0" name="Visibility">1</param>
                                         </action>
                                     </actions>
+                                    <sub-events>
+                                        <event-block sid="294835269832736">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="1651872845577164" type="System">
+                                                    <param id="0" name="First value">left(joystickShapes, 2) = &quot;--&quot; | right(joystickShapes, 2) = &quot;--&quot; ? 1 : 0</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Second value">1</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="6494408576290458" type="CurrentJoystick">
+                                                    <param id="0" name="Visibility">0</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="593025944442571">
+                                            <conditions>
+                                                <condition id="-22" name="Else" sid="5566815524331624" type="System" />
+                                            </conditions>
+                                            <actions>
+                                                <action id="-15" name="Set visible" sid="4684988868530845" type="CurrentJoystick">
+                                                    <param id="0" name="Visibility">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
                                 </event-block>
                             </sub-events>
+                        </event-block>
+                        <event-block sid="2806306207403339">
+                            <conditions>
+                                <condition id="-22" name="Else" sid="6653511935638018" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="6554916026027041" type="Hands">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                                <action id="-15" name="Set visible" sid="356665786921676" type="CurrentJoystick">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                            </actions>
                         </event-block>
                     </sub-events>
                 </event-block>
@@ -1043,6 +1127,181 @@
                 </event-block>
             </sub-events>
         </event-group>
+        <event-group description="" sid="3104443543604468" title="Keyboard">
+            <sub-events>
+                <event-block disabled="1" sid="8999311307089785">
+                    <conditions>
+                        <condition id="1" name="On any key pressed" sid="8651572739530442" type="Keyboard" />
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="5246573619272472" type="DebugMessage">
+                            <param id="0" name="Text">&quot;k+=&quot; &amp; Keyboard.LastKeyCode</param>
+                        </action>
+                        <action id="2" name="Send text" sid="9578611039237159" type="WebSocket">
+                            <param id="0" name="Data">&quot;kp:&quot; &amp; Keyboard.LastKeyCode</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block disabled="1" sid="2218075676195821">
+                    <conditions>
+                        <condition id="7" name="On any key released" sid="2542991538226952" type="Keyboard" />
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="671361625304102" type="DebugMessage">
+                            <param id="0" name="Text">&quot;k-=&quot; &amp; Keyboard.LastKeyCode</param>
+                        </action>
+                        <action id="2" name="Send text" sid="9448401477319969" type="WebSocket">
+                            <param id="0" name="Data">&quot;kr:&quot; &amp; Keyboard.LastKeyCode</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="2362024051999534">
+                    <conditions>
+                        <condition id="0" name="On function" sid="3758590718933115" type="Function">
+                            <param id="0" name="Name">&quot;checkKeys&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-9" name="Set value" sid="4999193286126406" type="System">
+                            <param id="0" name="Variable">pressedKeys</param>
+                            <param id="1" name="Value">&quot;&quot;</param>
+                        </action>
+                    </actions>
+                    <sub-events>
+                        <event-block sid="4604168279561667">
+                            <conditions>
+                                <condition id="-10" name="For" sid="3459270091636068" type="System">
+                                    <param id="0" name="Name">&quot;keyChecker&quot;</param>
+                                    <param id="1" name="Start index">0</param>
+                                    <param id="2" name="End index">len(usedKeys) / 3 - 1</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="1734034806043203">
+                                    <conditions>
+                                        <condition id="5" name="Key code is down" sid="8385125233047933" type="Keyboard">
+                                            <param id="0" name="Keycode">int(mid(usedKeys, loopindex * 3, 3))</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-9" name="Set value" sid="4594162541612522" type="System">
+                                            <param id="0" name="Variable">pressedKeys</param>
+                                            <param id="1" name="Value">pressedKeys &amp; mid(usedKeys, loopindex * 3, 3)</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="2919703460911434">
+                    <conditions>
+                        <condition id="0" name="On function" sid="6911664112046346" type="Function">
+                            <param id="0" name="Name">&quot;sendPressedKeys&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions />
+                    <sub-events>
+                        <event-block sid="8184625357511258">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="1764901947890882" type="System">
+                                    <param id="0" name="Variable">pressedKeys</param>
+                                    <param id="1" name="Comparison">1</param>
+                                    <param id="2" name="Value">oldPressedKeys</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="2" name="Send text" sid="6761327752231831" type="WebSocket">
+                                    <param id="0" name="Data">&quot;kp:&quot; &amp; pressedKeys</param>
+                                </action>
+                                <action id="-9" name="Set value" sid="5370693678367176" type="System">
+                                    <param id="0" name="Variable">oldPressedKeys</param>
+                                    <param id="1" name="Value">pressedKeys</param>
+                                </action>
+                                <action id="0" name="Call function" sid="7990973344622326" type="Function">
+                                    <param id="0" name="Name">&quot;showKeys&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="5567073208990034">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="975204624221976" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                                <condition id="-14" name="Compare variable" sid="5183095008201587" type="System">
+                                    <param id="0" name="Variable">hideJoysticks</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                                <condition id="-14" name="Compare variable" sid="496432052604791" type="System">
+                                    <param id="0" name="Variable">pressedKeys</param>
+                                    <param id="1" name="Comparison">1</param>
+                                    <param id="2" name="Value">&quot;&quot;</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-9" name="Set value" sid="7282743318645989" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Value">0</param>
+                                </action>
+                                <action id="0" name="Call function" sid="3578154113919828" type="Function">
+                                    <param id="0" name="Name">&quot;updateJoysticks&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                                <action id="0" name="Call function" sid="5921394016397385" type="Function">
+                                    <param id="0" name="Name">&quot;updateControls&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+                <event-block sid="767487017083609">
+                    <conditions>
+                        <condition id="0" name="On function" sid="5485753439761617" type="Function">
+                            <param id="0" name="Name">&quot;showKeys&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="2505467498480182" type="DebugMessage">
+                            <param id="0" name="Text">&quot;&quot;</param>
+                        </action>
+                    </actions>
+                    <sub-events>
+                        <event-block sid="1602297019128228">
+                            <conditions>
+                                <condition id="-10" name="For" sid="1352992590716975" type="System">
+                                    <param id="0" name="Name">&quot;keyShower&quot;</param>
+                                    <param id="1" name="Start index">0</param>
+                                    <param id="2" name="End index">len(pressedKeys) / 3 - 1</param>
+                                </condition>
+                            </conditions>
+                            <actions />
+                            <sub-events>
+                                <event-block sid="3155699204360004">
+                                    <conditions>
+                                        <condition id="-8" name="Compare two values" sid="7883291072125451" type="System">
+                                            <param id="0" name="First value">int(mid(pressedKeys, loopindex * 3, 3))</param>
+                                            <param id="1" name="Comparison">4</param>
+                                            <param id="2" name="Second value">0</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Set text" sid="8345338939616042" type="DebugMessage">
+                                            <param id="0" name="Text">(DebugMessage.Text = &quot;&quot; ? &quot;&quot; : DebugMessage.Text &amp; &quot;, &quot;) &amp; str(int(mid(pressedKeys, loopindex * 3, 3)))</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-block>
+            </sub-events>
+        </event-group>
         <event-group description="" sid="3755647968920593" title="Touching">
             <sub-events>
                 <event-block sid="9488571855042725">
@@ -1060,6 +1319,11 @@
                                     <param id="0" name="Variable">touchId1</param>
                                     <param id="1" name="Comparison">2</param>
                                     <param id="2" name="Value">0</param>
+                                </condition>
+                                <condition id="-14" name="Compare variable" sid="4867416628488395" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
                                 </condition>
                             </conditions>
                             <actions>
@@ -1079,11 +1343,39 @@
                                     <param id="1" name="Comparison">2</param>
                                     <param id="2" name="Value">0</param>
                                 </condition>
+                                <condition id="-14" name="Compare variable" sid="2475007597043275" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
                             </conditions>
                             <actions>
                                 <action id="-9" name="Set value" sid="3069773189404767" type="System">
                                     <param id="0" name="Variable">touchId2</param>
                                     <param id="1" name="Value">Touch.TouchID</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="8847573202879449">
+                            <conditions>
+                                <condition id="-14" name="Compare variable" sid="5768807625698131" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-9" name="Set value" sid="143648351548994" type="System">
+                                    <param id="0" name="Variable">showJoysticks</param>
+                                    <param id="1" name="Value">1</param>
+                                </action>
+                                <action id="0" name="Call function" sid="1239311904173554" type="Function">
+                                    <param id="0" name="Name">&quot;updateJoysticks&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
+                                </action>
+                                <action id="0" name="Call function" sid="1512079308666276" type="Function">
+                                    <param id="0" name="Name">&quot;updateControls&quot;</param>
+                                    <param id="1" name="Parameter {n}"></param>
                                 </action>
                             </actions>
                         </event-block>
@@ -1362,6 +1654,14 @@
                         </action>
                         <action id="0" name="Call function" sid="3528050705892775" type="Function">
                             <param id="0" name="Name">&quot;sendJoystickValues&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                        <action id="0" name="Call function" sid="317644408137373" type="Function">
+                            <param id="0" name="Name">&quot;checkKeys&quot;</param>
+                            <param id="1" name="Parameter {n}"></param>
+                        </action>
+                        <action id="0" name="Call function" sid="3942906403082778" type="Function">
+                            <param id="0" name="Name">&quot;sendPressedKeys&quot;</param>
                             <param id="1" name="Parameter {n}"></param>
                         </action>
                         <action id="0" name="Call function" sid="4945109371656173" type="Function">
@@ -1855,6 +2155,10 @@
                         </condition>
                     </conditions>
                     <actions>
+                        <action id="-9" name="Set value" sid="1560894653696282" type="System">
+                            <param id="0" name="Variable">usedKeys</param>
+                            <param id="1" name="Value">WebSocketXML.StringValue(&quot;/msg/kb&quot;)</param>
+                        </action>
                         <action id="-9" name="Set value" sid="5758495670264298" type="System">
                             <param id="0" name="Variable">joystickBehaviors</param>
                             <param id="1" name="Value">WebSocketXML.StringValue(&quot;/msg/jb&quot;)</param>
@@ -1862,6 +2166,14 @@
                         <action id="-9" name="Set value" sid="4667596402758101" type="System">
                             <param id="0" name="Variable">joystickShapes</param>
                             <param id="1" name="Value">WebSocketXML.StringValue(&quot;/msg/js&quot;)</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="9606907117927992" type="System">
+                            <param id="0" name="Variable">hideJoysticks</param>
+                            <param id="1" name="Value">WebSocketXML.StringValue(&quot;/msg/hj&quot;) = &quot;1&quot; ? 1 : 0</param>
+                        </action>
+                        <action id="-9" name="Set value" sid="6947106422876336" type="System">
+                            <param id="0" name="Variable">showDebugInfo</param>
+                            <param id="1" name="Value">WebSocketXML.StringValue(&quot;/msg/di&quot;) = &quot;1&quot; ? 1 : 0</param>
                         </action>
                         <action id="-9" name="Set value" sid="8596369750324514" type="System">
                             <param id="0" name="Variable">joystickCurrentPanel</param>
@@ -1898,6 +2210,10 @@
                 <condition id="1" name="On closed" sid="6735888847434811" type="WebSocket" />
             </conditions>
             <actions>
+                <action id="-9" name="Set value" sid="6923616859401223" type="System">
+                    <param id="0" name="Variable">usedKeys</param>
+                    <param id="1" name="Value">&quot;&quot;</param>
+                </action>
                 <action id="-9" name="Set value" sid="43742754830142" type="System">
                     <param id="0" name="Variable">joystickShapes</param>
                     <param id="1" name="Value">&quot;----&quot;</param>

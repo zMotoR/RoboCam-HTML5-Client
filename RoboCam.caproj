@@ -18,6 +18,7 @@
         <plugin author="Scirra" id="Function" version="1">Function</plugin>
         <plugin author="Jesse Johnston" id="HTML_Img" version="1.299999952">HTML_Img</plugin>
         <plugin author="Jesse Johnston, JP Deblonde" id="HTML_iFrame" version="1.100000024">HTML_iFrame</plugin>
+        <plugin author="Scirra" id="Keyboard" version="1">Keyboard</plugin>
         <plugin author="Scirra" id="LocalStorage" version="1">Local storage</plugin>
         <plugin author="Scirra" id="Sprite" version="1">Sprite</plugin>
         <plugin author="Scirra" id="Text" version="1">Text</plugin>
@@ -168,6 +169,9 @@
         <object-type name="DebugMessage" sid="3391463512936438">
             <plugin id="Text" />
         </object-type>
+        <object-type name="Keyboard" sid="5716854581914752">
+            <plugin id="Keyboard" />
+        </object-type>
     </object-folder>
     <families />
     <layout-folder>
@@ -188,6 +192,7 @@
             </properties>
         </global-instance>
         <global-instance type="LocalStorage" uid="16" />
+        <global-instance type="Keyboard" uid="20" />
     </global-instances>
     <sounds-folder />
     <music-folder />
